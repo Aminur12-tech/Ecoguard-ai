@@ -16,14 +16,14 @@ function App() {
     setError(''); // Clear error on input
   };
 
-  // ✅ FIXED: Proper form submit handler
+  //  FIXED: Proper form submit handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent page reload
     setLoading(true);
     setError('');
 
     try {
-      console.log('Sending to backend:', formData); // Debug log
+      console.log('Sending to backend:', formData); 
       
       const res = await axios.post('http://localhost:5000/api/auth/register', {
         name: formData.fullName,
@@ -44,14 +44,18 @@ function App() {
     }
   };
 
+  const handleLogin = () => {
+    window.location.href = '/login';
+  }
+
+  localStorage.setItem('userRole', formData.role);
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-100 via-green-50 to-teal-100 flex items-center justify-center p-4" style={{
-      backgroundImage: 'url(https://static2.tripoto.com/media/filter/tst/img/2551121/Image/1740046904_untitled_design_2025_02_20t155129_687.jpg.webp)',
+      backgroundImage: 'url(https://lh3.googleusercontent.com/aida-public/AB6AXuArw11frnBe8Pdyvcd3PIEQwpUtXWeRAt3tju0UaE-VEGBCVO80cEhOzGzaj3T33HtNIxXnHRlz0rvmLf9qqlpbA30jYIcHv4TR-S4Tx8_sB7fH62cGk5-WNPhPIhZIVyUYXQuzeDaKyEG8Cyb91CHGZXoQmY1cPzwkFz5aaW2vuMeZJ4Pai0T3eIdDyfXieuIq_tQxve7QPyp_8tEIHGz-0gOflVeGTcSP6U3cMod60fffcZBPTXUtReyPLBVoQ10AaAhJUB9oIETM)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     }}>
-      <div className=" absolute inset-0 bg-black/60" />
-      <div className="bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-emerald-200/50 max-w-md w-full mx-auto p-8">
+      <div className="bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-emerald-200/50 max-w-md w-full mx-auto p-8 m-8">
         
         {/* Header */}
         <div className="text-center mb-8">
@@ -75,7 +79,7 @@ function App() {
             <input
               type="text"
               name="fullName"
-              placeholder="John Doe"
+              placeholder="Enter Full Name"
               value={formData.fullName}
               onChange={handleChange}
               className="w-full p-3 border border-gray-200 rounded-3xl focus:ring-4 focus:ring-emerald-200 focus:border-emerald-400 transition-all shadow-sm hover:shadow-md bg-white/50"
@@ -89,7 +93,7 @@ function App() {
             <input
               type="email"
               name="email"
-              placeholder="john@example.com"
+              placeholder="Enter Email Address"
               value={formData.email}
               onChange={handleChange}
               className="w-full p-3 border border-gray-200 rounded-3xl focus:ring-4 focus:ring-emerald-200 focus:border-emerald-400 transition-all shadow-sm hover:shadow-md bg-white/50"
@@ -173,13 +177,15 @@ function App() {
 
         {/* Footer */}
         <div className="text-center mt-8 pt-6 border-t border-gray-200/50">
-          <p className="text-sm text-gray-600">
-            Already have an account? <span className="font-semibold text-emerald-600 hover:text-emerald-700 cursor-pointer transition-colors">Login</span>
+          <p className="text-sm text-gray-600" onClick={handleLogin}>
+            Already have an account? <span className="font-bold text-emerald-600 hover:text-emerald-700 cursor-pointer transition-colors">Login</span>
           </p>
         </div>
       </div>
     </div>
   );
 }
+
+
 
 export default App;

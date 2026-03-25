@@ -45,7 +45,7 @@ router.post("/login", async(req, res) => {
         }
         const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET || "ecogaurd_secret", { expiresIn: "7d"});
         res.json({token, user: {_id: user._id, role: user.role}});
-
+        localStorage.setItem('userRole', user.role);    
     }catch(error){
         console.error("Error logging in user:", error);
         res.status(500).json({message: "Error logging in user"});

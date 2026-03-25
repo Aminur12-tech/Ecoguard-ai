@@ -10,15 +10,28 @@ app.use(cors());
 app.use(express.json());
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URI!).then(() => {
-    console.log("Connected to MongoDB");
-}).catch((error)=> {
-    console.error("Error connecting to MongoDB:", error);
-});   
 
+async function connectDB(){
+    try{
+        await mongoose.connect(process.env.MONGO_URI!, {
+            connectTimeoutMS: 10000,
+            socketTimeoutMS: 30000
+        });
+        console.log("MongoDB connected successfully");
 
-app.use('/api/auth', authRoute);
+    }catch(error){
+        console.error("MongoDB connection error: ", error);
+        process.exit(1);
+    }
+}
 
-app.listen(5000, () => {
-    console.log("Server is running on port 5000");
-});
+connectDB();
+
+  
+
+mongoose.connection.on('connected', () => {
+    app.use('/api/auth', authRoute);
+    app.listen(5000, () => {
+        console.log("Server is running on port 5000");
+    });
+})
