@@ -2,7 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose  from 'mongoose';
+
+
 import authRoute from './routes/auth';
+import ugcRoute from './routes/ugc';
 
 
 const app =  express();
@@ -31,6 +34,7 @@ connectDB();
 
 mongoose.connection.on('connected', () => {
     app.use('/api/auth', authRoute);
+    app.use('/api/ugc', ugcRoute);
     app.listen(5000, () => {
         console.log("Server is running on port 5000");
     });
