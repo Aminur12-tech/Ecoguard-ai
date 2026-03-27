@@ -4,6 +4,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Landing from './pages/Landing';
 import ProtectedRoute from './components/ProtectedRoute';
+import GuideDashboard from './pages/GuideDashboard';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/guide-dashboard" element={<ProtectedRoute><GuideDashboard /></ProtectedRoute>} />
         </Routes>
       </div>
     </BrowserRouter>
