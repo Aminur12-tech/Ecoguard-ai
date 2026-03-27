@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   MapPin, Users, DollarSign, Upload, Settings, LogOut,
-  User, Home, Map, Award 
+  User, Home, Map, Award
 } from 'lucide-react';
+import GuideDashboard from '../pages/GuideDashboard';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Dashboard = () => {
     const role = localStorage.getItem('userRole') || 'Traveller';
     console.log(role);
     setUserRole(role);
-    
+
     // Mock stats - replace with real API later
     if (role === 'Vendor') setStats({ trips: 12, ecoScore: 8.7, revenue: 24500 });
     if (role === 'Guide') setStats({ trips: 28, ecoScore: 9.2, revenue: 15600 });
@@ -25,6 +26,10 @@ const Dashboard = () => {
     localStorage.clear();
     navigate('/');
   };
+
+  const handleAddPOI = () => {
+    window.location.href = '/guide-dashboard';
+  }
 
   const RoleDashboard = () => {
     switch (userRole) {
@@ -41,14 +46,14 @@ const Dashboard = () => {
                   Start Planning →
                 </button>
               </div>
-              
+
               <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white p-8 rounded-3xl shadow-2xl hover:shadow-3xl transition-all">
                 <Award className="w-12 h-12 mb-4 opacity-90" />
                 <h3 className="text-2xl font-bold mb-2">Eco Score</h3>
                 <p className="text-3xl font-black">{stats.ecoScore}/10</p>
               </div>
             </div>
-            
+
             <div className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-emerald-200 shadow-xl">
               <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
                 <User className="w-6 h-6 mr-2 text-emerald-600" />
@@ -109,7 +114,7 @@ const Dashboard = () => {
               <Upload className="w-20 h-20 mx-auto mb-6 opacity-90" />
               <h3 className="text-3xl font-black mb-4">Earn 5% Commission</h3>
               <p className="text-xl">Submit Hidden Assam Gems</p>
-              <button className="mt-6 bg-white/30 backdrop-blur-sm px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/50">
+              <button onClick={handleAddPOI} className="mt-6 bg-white/30 backdrop-blur-sm px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/50">
                 + Add New POI
               </button>
             </div>

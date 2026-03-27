@@ -10,12 +10,19 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   try {
     const { name, description, lat, lng, submittedId } = req.body;
 
+    console.log('Received POI submission: ', req.body);
+    console.log('Received file: ', req.file);
+
+
     // ✅ Fix 1: Check file exists
     if (!req.file) {
       return res.status(400).json({ message: 'No image uploaded' });
     }
 
-    const result = await uploadImage(req.file.path);
+    console.log("File path:", req.file.path);
+    const result = await uploadImage(req.file.path); //isssue here
+    console.log("Upload result:", result);
+
 
     // ✅ Fix 2: GeoJSON format [lng, lat]
     const poi = new POI({

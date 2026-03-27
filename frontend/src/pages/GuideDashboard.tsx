@@ -30,9 +30,11 @@ const GuideDashboard = () => {
 
         try {
             setUploadStatus('Uploading to AI Vision...');
-            const res = await axios.post('http://localhost:5000/api/ugc/upload', formData, {
+            const res = await axios.post('http://127.0.0.1:5000/api/ugc/upload', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
+
+            console.log('upload response:', res.data);
 
             setUploadStatus(`✅ ${res.data.message}`);
             setPoiData({ name: '', description: '', lat: 26.14, lng: 91.73 });
@@ -106,10 +108,10 @@ const GuideDashboard = () => {
                         {/* Status */}
                         {uploadStatus && (
                             <div className={`p-6 rounded-3xl shadow-xl text-center font-bold text-xl ${uploadStatus.includes('✅')
-                                    ? 'bg-emerald-100 border-4 border-emerald-300 text-emerald-800'
-                                    : uploadStatus.includes('❌')
-                                        ? 'bg-red-100 border-4 border-red-300 text-red-800'
-                                        : 'bg-blue-100 border-4 border-blue-300 text-blue-800'
+                                ? 'bg-emerald-100 border-4 border-emerald-300 text-emerald-800'
+                                : uploadStatus.includes('❌')
+                                    ? 'bg-red-100 border-4 border-red-300 text-red-800'
+                                    : 'bg-blue-100 border-4 border-blue-300 text-blue-800'
                                 }`}>
                                 {uploadStatus}
                             </div>
@@ -120,8 +122,8 @@ const GuideDashboard = () => {
                             type="submit"
                             disabled={!file}
                             className={`w-full py-6 px-8 rounded-3xl font-black text-xl shadow-2xl transition-all duration-500 transform ${file
-                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white hover:shadow-3xl hover:-translate-y-2 hover:scale-105'
-                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white hover:shadow-3xl hover:-translate-y-2 hover:scale-105'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                 }`}
                         >
                             🚀 Submit POI for AI Analysis & Community Vote

@@ -30,11 +30,15 @@ async function connectDB(){
 
 connectDB();
 
-  
+console.log("Before cloudinary import, CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME);
+import "./config/cloudinary"; // or wherever you put the config file
+console.log("After cloudinary import:", process.env.CLOUDINARY_CLOUD_NAME);  
 
 mongoose.connection.on('connected', () => {
     app.use('/api/auth', authRoute);
     app.use('/api/ugc', ugcRoute);
+
+    
     app.listen(5000, () => {
         console.log("Server is running on port 5000");
     });
