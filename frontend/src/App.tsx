@@ -5,11 +5,12 @@ import Login from './components/Login';
 import Landing from './pages/Landing';
 import ProtectedRoute from './components/ProtectedRoute';
 import GuideDashboard from './pages/GuideDashboard';
+import TravellerDashboard from './pages/TravellerDashboard';
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-gradient-to-br from-green-400 to-blue-500">
+      <div className="min-h-screen bg-gradient-to-br">
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<Register />} />
@@ -23,6 +24,8 @@ function App() {
             }
           />
           <Route path="/guide-dashboard" element={<ProtectedRoute><GuideDashboard /></ProtectedRoute>} />
+          <Route path="/traveller-dashboard" element={<ProtectedRoute><TravellerDashboard /></ProtectedRoute>} />
+
         </Routes>
       </div>
     </BrowserRouter>

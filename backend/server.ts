@@ -6,6 +6,7 @@ import mongoose  from 'mongoose';
 
 import authRoute from './routes/auth';
 import ugcRoute from './routes/ugc';
+import ecoRoutes from './routes/ecoRoutes';
 
 
 const app =  express();
@@ -37,6 +38,7 @@ console.log("After cloudinary import:", process.env.CLOUDINARY_CLOUD_NAME);
 mongoose.connection.on('connected', () => {
     app.use('/api/auth', authRoute);
     app.use('/api/ugc', ugcRoute);
+    app.use('/api/routes', ecoRoutes);
 
     
     app.listen(5000, () => {
