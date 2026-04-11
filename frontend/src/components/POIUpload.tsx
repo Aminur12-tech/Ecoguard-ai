@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Upload } from 'lucide-react';
 
-const GuideDashboard = () => {
+export default function POIUpload() {
     const [file, setFile] = useState<File | null>(null);
     const [poiData, setPoiData] = useState({
         name: '',
@@ -162,4 +162,4 @@ const GuideDashboard = () => {
     );
 };
 
-export default GuideDashboard;
+ 

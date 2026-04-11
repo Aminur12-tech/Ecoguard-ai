@@ -4,7 +4,7 @@ import {
   MapPin, Users, DollarSign, Upload, Settings, LogOut,
   User, Home, Map, Award
 } from 'lucide-react';
-import GuideDashboard from '../pages/GuideDashboard';
+import GuideDashboard from '../components/POIUpload';
 
 const Dashboard = () => {
   const navigate = useNavigate();

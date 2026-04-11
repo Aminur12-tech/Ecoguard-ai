@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from "react-leaflet";
 
-export default function TravellerDashboard() {
+export default function EcoRoute() {
     const [origin, setOrigin] = useState('Silchar, Assam');
     const [destination, setDestination] = useState('Kaziranga, Assam');
     const [bestRoute, setBestRoute] = useState<any>(null);
@@ -36,7 +36,7 @@ export default function TravellerDashboard() {
 
     return (
         <div className="p-6 space-y-6">
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-3 gap-4 bg-">
                 <input
                     value={origin}
                     onChange={(e) => setOrigin(e.target.value)}
@@ -61,7 +61,7 @@ export default function TravellerDashboard() {
                 center={[24.83, 92.78]}
                 zoom={7}
                 style={{ height: '500px', width: '100%', borderRadius: '16px' }}
-            >
+            >   
                 <TileLayer
                     attribution='&copy; OpenStreetMap contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

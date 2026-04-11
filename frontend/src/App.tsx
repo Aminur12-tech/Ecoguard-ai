@@ -1,11 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Dashboard from './components/Dashboard';
-import Register from './components/Register';
-import Login from './components/Login';
+import Dashboard from './pages/Dashboard';
+import Register from './pages/Register';
+import Login from './pages/Login';
 import Landing from './pages/Landing';
 import ProtectedRoute from './components/ProtectedRoute';
-import GuideDashboard from './pages/GuideDashboard';
-import TravellerDashboard from './pages/TravellerDashboard';
+// import GuideDashboard from './components/GuideDashboard';
+import TravellerDashboard from './components/TravellerDashboard';
+import EcoRoute from './components/EcoRoute';
+import POIUpload from './components/POIUpload';
+import MyTrips from './components/MyTrips';
+import PlanRoute from './components/PlanRoute';
 
 function App() {
   return (
@@ -23,9 +27,12 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/guide-dashboard" element={<ProtectedRoute><GuideDashboard /></ProtectedRoute>} />
+          {/* <Route path="/guide-dashboard" element={<ProtectedRoute><GuideDashboard /></ProtectedRoute>} /> */}
           <Route path="/traveller-dashboard" element={<ProtectedRoute><TravellerDashboard /></ProtectedRoute>} />
-
+          <Route path="/eco-route" element={<ProtectedRoute><EcoRoute /></ProtectedRoute>} />
+          <Route path="/poi-upload" element={<ProtectedRoute><POIUpload /></ProtectedRoute>} />
+          <Route path='/mytrips' element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
+          <Route path='/plane-route' element={<ProtectedRoute><PlanRoute /></ProtectedRoute>} />
         </Routes>
       </div>
     </BrowserRouter>
