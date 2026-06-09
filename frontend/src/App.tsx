@@ -10,6 +10,11 @@ import EcoRoute from './components/EcoRoute';
 import POIUpload from './components/POIUpload';
 import MyTrips from './components/MyTrips';
 import PlanRoute from './components/PlanRoute';
+import ExplorePlaces from './components/ExplorePlaces';
+import ExploreBookings from './components/ExploreBookings';
+import VendorDashboard from './components/VendorDashboard';
+import AdminDashboard from './components/AdminDashboard';
+import CrowdForcasting from './pages/CrowdForecasting';
 
 function App() {
   return (
@@ -33,6 +38,11 @@ function App() {
           <Route path="/poi-upload" element={<ProtectedRoute><POIUpload /></ProtectedRoute>} />
           <Route path='/mytrips' element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
           <Route path='/plane-route' element={<ProtectedRoute><PlanRoute /></ProtectedRoute>} />
+          <Route path='/explore-places' element={<ProtectedRoute><ExplorePlaces /></ProtectedRoute>} />
+          <Route path='/bookings' element={<ProtectedRoute><ExploreBookings /></ProtectedRoute>} />
+          <Route path='/vendordashboard' element={<ProtectedRoute><VendorDashboard /></ProtectedRoute>} />
+          <Route path='/admindashboard' element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+          <Route path='/crowd-forecasting' element={<ProtectedRoute><CrowdForcasting /></ProtectedRoute>} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 
 
-export default function HeroSectionTailwind() {
+export default function Landing() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [bgIndex, setBgIndex] = useState(0);
@@ -17,12 +17,9 @@ export default function HeroSectionTailwind() {
   }, []);
 
   const images = [
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS80GZxTWl2BuAzNPK2vxFexejuvhESqadCKQ&s",
-    "https://www.manasnationalparkonline.in/images/manas-tour-guide.jpg",
-    "https://www.northeastbullet.com/wp-content/uploads/2023/11/kar.jpg.webp",
-    "https://www.indianholiday.com/wordpress/wp-content/uploads/2025/06/Rang-Ghar.jpg",
-    "https://www.sharpholidays.in/blog/wp-content/uploads/2020/07/assam-tourism.jpg",
+    "https://images.travelandleisureasia.com/wp-content/uploads/sites/2/2024/01/29132107/Kaziranga-National-Park-Golaghat-Mousam-Ray-Shutterstock.jpg?tr=w-1920",    "https://images.saymedia-content.com/.image/c_limit%2Ccs_srgb%2Cfl_progressive%2Cq_auto:eco%2Cw_700/MTg2MzEzNzUxNTE4MTI3MjMz/some-of-the-most-famous-places-in-assam-india.jpg",
     "https://www.tigersafariindia.in/wp-content/uploads/2022/08/kaziranga-national-park.jpg",
+    "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/09/19/12/a0.jpg",
   ];
 
   const handleRegister = () => {

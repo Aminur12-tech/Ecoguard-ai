@@ -1,7 +1,6 @@
 import express from 'express';
 import axios from 'axios';
 
-
 const router = express.Router();
 
 async function geocodePlace(place: string){
@@ -25,10 +24,9 @@ async function geocodePlace(place: string){
     return {
         lat: Number(res.data[0].lat),
         lon: Number(res.data[0].lon),
-        displayName: res.data[0].display_name
+        display_name: res.data[0].display_name
     };
 }
-
 
 async function getRoutes(origin: {lat: number; lon: number}, destination: {lat: number; lon: number}){
     const url =`https://router.project-osrm.org/route/v1/driving/${origin.lon},${origin.lat};${destination.lon},${destination.lat}`;
@@ -61,7 +59,6 @@ async function getWeather(lat:number, lon: number) {
     };
 }
 
-
 function calculateEcoScore(input: {
     distanceMeters: number;
     durationSeconds: number;
@@ -76,9 +73,8 @@ function calculateEcoScore(input: {
     const rainPenalty = input.rainMm * 7;
     const rainProbPenalty =  input.rainProbability * 0.08;
 
-
     const ecoScore = Math.max( 0, 100 - distancePenalty - durationPenalty - rainPenalty - rainProbPenalty);
-
+    console.log(ecoScore, distancePenalty, durationMin, rainPenalty, rainProbPenalty);
     return {
         ecoScore: +ecoScore.toFixed(2),
         distanceKm: +distanceKm.toFixed(2),
@@ -109,7 +105,6 @@ router.get('/eco', async (req, res) => {
 
         if(!routes.length){
             return res.status(404).json({error: 'No routes found'});
-
         }
 
         const scoredRoutes = await Promise.all(

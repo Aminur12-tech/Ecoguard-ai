@@ -2,12 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose  from 'mongoose';
-
+import "./config/cloudinary"; 
 
 import authRoute from './routes/auth';
 import ugcRoute from './routes/ugc';
 import ecoRoutes from './routes/ecoRoutes';
-
+import homestayRoutes from "./routes/homestayRoutes";
+import bookingRoutes from "./routes/booking.routes";
+import pricingRoutes from "./routes/pricingRoutes";
 
 const app =  express();
 app.use(cors());
@@ -31,16 +33,17 @@ async function connectDB(){
 
 connectDB();
 
-console.log("Before cloudinary import, CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME);
-import "./config/cloudinary"; // or wherever you put the config file
-console.log("After cloudinary import:", process.env.CLOUDINARY_CLOUD_NAME);  
+
+
+
 
 mongoose.connection.on('connected', () => {
     app.use('/api/auth', authRoute);
     app.use('/api/ugc', ugcRoute);
     app.use('/api/routes', ecoRoutes);
-
-    
+    app.use('/api/homestays', homestayRoutes);
+    app.use("/api/bookings", bookingRoutes);
+    app.use("/api/pricing", pricingRoutes);
     app.listen(5000, () => {
         console.log("Server is running on port 5000");
     });

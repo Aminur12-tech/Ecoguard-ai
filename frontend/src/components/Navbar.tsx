@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navbarItemsByRole } from '../config/navbarItems';
 
+
 type Role = 'traveller' | 'guide' | 'vendor' | 'admin' | 'superAdmin';
 
 type Props = {
@@ -16,6 +17,10 @@ export default function Navbar({ role, userName = 'User' }: Props) {
     const items = navbarItemsByRole[role] || [];
 
     const closeMobileMenu = () => setMobileOpen(false);
+
+    const handleLogout = () => {
+        window.location.href = "/";
+    }
 
     return (
         <nav className="w-full border-b bg-white sticky top-0 z-50  px-4 py-3 ">
@@ -138,7 +143,7 @@ export default function Navbar({ role, userName = 'User' }: Props) {
                         </Link>
 
                         <Link
-                            to="/logout"
+                            to="/"
                             onClick={closeMobileMenu}
                             className="block text-center px-4 py-3 rounded-xl bg-green-700 text-white font-medium hover:bg-green-800"
                         >

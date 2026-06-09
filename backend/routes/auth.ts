@@ -11,6 +11,11 @@ router.post("/register", async(req, res) => {
         const { name, email, role, password } = req.body;
         console.error("Received registration data ", {name, email, role, password});
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        const exitemail = await User.findOne({ email});
+        if(exitemail){
+            return res.status(400).json({message: "Email already exists"});
+        }
         
         const user = new User({
             name,
@@ -19,7 +24,7 @@ router.post("/register", async(req, res) => {
             password: hashedPassword,
         });
         await user.save();
-
+        
         const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET || "ecogaurd_secret", { expiresIn: "7d"});
         res.status(201).json({ token, user: { _id: user._id, role: user.role } });
     }catch(error){

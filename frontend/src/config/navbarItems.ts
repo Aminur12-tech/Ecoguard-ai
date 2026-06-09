@@ -1,11 +1,11 @@
 export const navbarItemsByRole = {
   traveller: [
-    { label: 'home', path: '/traveller/home' },
-    { label: 'Plan Route', path: '/traveller/plan-route' },
-    { label: 'My Trips', path: '/traveller/my-trips' },
-    { label: 'Explore Places', path: '/traveller/explore' },
-    { label: 'Bookings', path: '/traveller/bookings' },
-    { label: 'Weather', path: '/traveller/weather' },
+    { label: 'home', path: '/traveller-dashboard' },
+    { label: 'Plan Route', path: '/plane-route' },
+    { label: 'My Trips', path: '/mytrips' },
+    { label: 'Explore Places', path: '/explore-places' },
+    { label: 'Bookings', path: '/bookings' },
+    { label: 'Weather', path: '/crowd-forecasting' },
   ],
 
   guide: [
