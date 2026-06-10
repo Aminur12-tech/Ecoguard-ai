@@ -1,94 +1,133 @@
 import { useEffect, useState } from "react";
+
 import {
     getForecast,
-    ForecastData,
     getWeeklyForecast,
-    getOccupancy,
-    
+    ForecastData,
+    WeeklyForecastData
 } from "../services/forecastService";
-import CrowdLevelCard from "../components/CrowdLevelCard";
+
 import ForecastCard from "../components/ForecastCard";
+import CrowdLevelCard from "../components/CrowdLevelCard";
 import ForecastChart from "../components/ForecastChart";
 import WeeklyForecast from "../components/WeeklyForecast";
-import OccupancyCard from "../components/OccupancyCard";
-import RevenueCard from "../components/RevenueCard";
 
+import Navbar from "../components/Navbar";
 
 function CrowdForecasting() {
+
     const [forecast, setForecast] =
         useState<ForecastData | null>(null);
+
     const [weeklyForecast,
-        setWeeklyForecast] = useState([]);
-    const [occupancy, setOccupancy] = useState<number | null>(null);
+        setWeeklyForecast] =
+        useState<WeeklyForecastData[]>([]);
+
+    const [loading, setLoading] =
+        useState(true);
 
     useEffect(() => {
-        getForecast()
-            .then((data) => {
-                setForecast(data);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
 
-        getWeeklyForecast()
-            .then((data) => {
-                setWeeklyForecast(data);
-            });
+        const loadData = async () => {
 
-        getOccupancy()
-            .then((data) => {
-                setOccupancy(data.occupancyRate);
-            })
+            try {
+
+                const forecastData =
+                    await getForecast();
+
+                const weeklyData =
+                    await getWeeklyForecast();
+
+                setForecast(
+                    forecastData
+                );
+
+                setWeeklyForecast(
+                    weeklyData
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Error loading forecast:",
+                    error
+                );
+
+            } finally {
+
+                setLoading(false);
+
+            }
+        };
+
+        loadData();
+
     }, []);
 
-    return (
-        <div
-            style={{
-                padding: "20px",
-            }}
-        >
-            <h1>
-                EcoGuard AI Crowd Forecasting
-            </h1>
+    
 
-            {forecast && (
+    return (
+        <>
+            <Navbar role="traveller" userName="Aminur" />
+            <div
+                style={{
+                    padding: "20px"
+                }}
+            >
+                <h1>
+                    EcoGuard AI Crowd Forecasting
+                </h1>
+
+                {forecast && (
+
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns:
+                                "repeat(auto-fit,minmax(250px,1fr))",
+                            gap: "20px",
+                            marginTop: "20px"
+                        }}
+                    >
+
+                        <ForecastCard
+                            visitors={
+                                forecast.predictedVisitors
+                            }
+                        />
+
+                        <CrowdLevelCard
+                            level={
+                                forecast.crowdLevel
+                            }
+                        />
+
+                    </div>
+
+                )}
+
                 <div
                     style={{
-                        display: "grid",
-                        gridTemplateColumns:
-                            "repeat(2,1fr)",
-                        gap: "20px",
-                        marginTop: "20px",
+                        marginTop: "40px"
                     }}
                 >
-                    <ForecastCard
-                        visitors={
-                            forecast.predictedVisitors
-                        }
+                    <ForecastChart
+                        data={weeklyForecast}
                     />
-
-                    <CrowdLevelCard
-                        level={
-                            forecast.crowdLevel
-                        }
-                    />
-                    <OccupancyCard 
-                        occupancy={
-                            occupancy ?? 0
-                        }
-                    />
-                    <RevenueCard
-                        visitors={ forecast.predictedVisitors}/>
-                
                 </div>
-            )}
-            <ForecastChart
-                data={weeklyForecast}
-            />
-            <WeeklyForecast
-                data={weeklyForecast}
-            />
-        </div>
+
+                <div
+                    style={{
+                        marginTop: "40px"
+                    }}
+                >
+                    <WeeklyForecast
+                        data={weeklyForecast}
+                    />
+                </div>
+
+            </div>
+        </>
     );
 }
 

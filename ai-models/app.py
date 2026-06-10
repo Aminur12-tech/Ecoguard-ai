@@ -1,7 +1,8 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
+
 import pandas as pd
 import numpy as np
-from flask_cors import CORS
 import joblib
 
 from tensorflow.keras.models import load_model
@@ -9,45 +10,65 @@ from tensorflow.keras.models import load_model
 app = Flask(__name__)
 CORS(app)
 
-model = load_model("crowd_model.keras")
-scaler = joblib.load("scaler.pkl")
-
-df = pd.read_csv(
-    "dataset/crowd_data.csv"
+# Load model and scaler once
+model = load_model(
+    "multivariate_model.keras"
 )
 
-data = df["visitors"].values.reshape(-1,1)
+scaler = joblib.load(
+    "multivariate_scaler.pkl"
+)
 
-scaled_data = scaler.transform(data)
+FEATURES = [
+    "visitors",
+    "temperature",
+    "humidity",
+    "rainfall",
+    "is_weekend",
+    "is_holiday",
+    "festival_score"
+]
+
 
 @app.route("/forecast")
 def forecast():
 
-    last_10 = df["visitors"].values[-10:]
-
-    scaled = scaler.transform(
-        last_10.reshape(-1,1)
+    df = pd.read_csv(
+        "dataset/enriched_crowd_data.csv"
     )
 
-    X = scaled.reshape(1,10,1)
+    last_10 = df[
+        FEATURES
+    ].tail(10)
 
-    prediction = model.predict(
+    scaled = scaler.transform(
+        last_10
+    )
+
+    X = np.array([scaled])
+
+    pred = model.predict(
         X,
         verbose=0
     )
 
+    row = np.zeros((1, 7))
+
+    row[0][0] = pred[0][0]
+
     visitors = int(
         scaler.inverse_transform(
-            prediction
+            row
         )[0][0]
     )
 
-    level = "Low"
+    if visitors < 200:
+        level = "Low"
 
-    if visitors >= 100:
+    elif visitors < 300:
         level = "Medium"
 
-    if visitors >= 300:
+    else:
         level = "High"
 
     return jsonify({
@@ -55,50 +76,68 @@ def forecast():
         "crowdLevel": level
     })
 
-@app.route("/forecast/7days")
-def forecast_7days():
 
-    window = scaled_data[-10:].flatten().tolist()
+@app.route("/weekly-forecast")
+def weekly_forecast():
 
-    predictions = []
+    df = pd.read_csv(
+        "dataset/enriched_crowd_data.csv"
+    )
 
-    for i in range(7):
+    window = df[
+        FEATURES
+    ].tail(10).values
 
-        X = np.array(window[-10:]).reshape(1, 10, 1)
+    forecast_data = []
 
-        pred = model.predict(X, verbose=0)
+    for day in range(7):
 
-        value = pred[0][0]
+        scaled_window = scaler.transform(
+            window
+        )
 
-        window.append(value)
+        X = np.array([
+            scaled_window
+        ])
+
+        pred = model.predict(
+            X,
+            verbose=0
+        )
+
+        row = np.zeros((1, 7))
+
+        row[0][0] = pred[0][0]
 
         visitors = int(
             scaler.inverse_transform(
-                [[value]]
+                row
             )[0][0]
         )
 
-        predictions.append({
-            "day": f"Day {i+1}",
+        forecast_data.append({
+            "day": f"Day {day + 1}",
             "visitors": visitors
         })
 
-    return jsonify(predictions)
+        # Create next input row
+        next_row = window[-1].copy()
 
-@app.route("/forecast/occupancy")
-def occupancy():
+        next_row[0] = visitors
 
-    visitors = 272
+        window = np.vstack([
+            window[1:],
+            next_row
+        ])
 
-    occupancy_rate = round(
-        (visitors / 350) * 100,
-        2
+    return jsonify(
+        forecast_data
     )
 
-    return jsonify({
-        "occupancyRate":
-        occupancy_rate
-    })    
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )

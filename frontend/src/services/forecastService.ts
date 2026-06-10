@@ -1,36 +1,33 @@
 import axios from "axios";
 
+const API_URL = "http://localhost:5000";
+
 export interface ForecastData {
-  predictedVisitors: number;
-  crowdLevel: string;
+    predictedVisitors: number;
+    crowdLevel: string;
+}
+
+export interface WeeklyForecastData {
+    day: string;
+    visitors: number;
 }
 
 export const getForecast = async (): Promise<ForecastData> => {
-  const response = await axios.get<ForecastData>(
-    "http://localhost:5000/forecast"
-  );
 
-  return response.data;
+    const response = await axios.get(
+        `${API_URL}/forecast`
+    );
+
+    return response.data;
 };
 
 export const getWeeklyForecast =
-async () => {
+    async (): Promise<WeeklyForecastData[]> => {
 
-  const response =
-    await axios.get(
-      "http://localhost:5000/forecast/7days"
+    const response = await axios.get(
+        `${API_URL}/weekly-forecast`
     );
 
-  return response.data;
+    return response.data;
 };
 
-export const getOccupancy =
-async () => {
-
-  const response =
-   await axios.get(
-     "http://localhost:5000/forecast/occupancy"
-   );
-
-  return response.data;
-};
