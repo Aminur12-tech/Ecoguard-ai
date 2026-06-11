@@ -1,8 +1,11 @@
 import React from "react";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function ExplorePlaces() {
-
+    const navigate = useNavigate();
     const openGeoMap = () => {
         window.location.href = "/plane-route";
     }
@@ -45,9 +48,9 @@ export default function ExplorePlaces() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                     {/* Large Card */}
-                    <div className="md:col-span-2 relative rounded-3xl overflow-hidden group">
+                    <div onClick={() => navigate("/places/kaziranga")} className="md:col-span-2 relative rounded-3xl overflow-hidden group">
                         <img
-                            src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600"
+                            src="https://www.guwahatiairport.com/wp-content/uploads/2025/04/Guwahati-Kaziranga-Tour.jpg"
                             className="w-full h-[300px] md:h-full object-cover group-hover:scale-105 transition duration-500"
                         />
                         <div className="absolute inset-0 bg-black/30" />
@@ -66,21 +69,24 @@ export default function ExplorePlaces() {
                     </div>
 
                     {/* Map Card */}
-                    <div className="relative bg-gradient-to-br from-teal-500 to-teal-700 rounded-3xl p-6 text-white flex items-end">
-                        <div>
+                    <div className="relative rounded-3xl overflow-hidden group">
+                        <img
+                            src="https://s7ap1.scene7.com/is/image/incredibleindia/samaguri-satra-majuli-assam-1-attr-nearby?qlt=82&ts=1751459550795"
+                            className="w-full h-full object-cover group-hover:scale-105 transition"
+                        />
+                        <div className="absolute inset-0 bg-black/30" />
+                        <div className="absolute bottom-4 left-4 text-white">
                             <p className="text-xs uppercase">Culture</p>
-                            <h3 className="text-xl font-semibold mt-2">Majuli Island</h3>
-                            <p className="text-sm text-white/80">
-                                World's largest river island & neo-Vaishnavite hub.
-                            </p>
+                            <h3 className="text-lg font-semibold">Majuli Island</h3>
+                            <p className="text-xs"> World's largest river island & neo-Vaishnavite hub.</p>
                         </div>
                     </div>
 
                     {/* Card 3 */}
                     <div className="relative rounded-3xl overflow-hidden group">
                         <img
-                            src="https://images.unsplash.com/photo-1618826411640-d6df44dd3f7a?q=80&w=800"
-                            className="w-full h-64 object-cover group-hover:scale-105 transition"
+                            src="https://wintertourandtravels.com/assets/images/packages/Manas%20National%20Park%20Jungle%20Stay1.jpg"
+                            className="w-full h-full object-cover group-hover:scale-105 transition"
                         />
                         <div className="absolute inset-0 bg-black/30" />
                         <div className="absolute bottom-4 left-4 text-white">
@@ -93,7 +99,7 @@ export default function ExplorePlaces() {
                     {/* Card 4 */}
                     <div className="md:col-span-2 relative rounded-3xl overflow-hidden group">
                         <img
-                            src="https://images.unsplash.com/photo-1593642532973-d31b6557fa68?q=80&w=1600"
+                            src="https://media.assettype.com/english-sentinelassam%2Fimport%2Fh-upload%2F2021%2F02%2F01%2F194824-tea-garden-1.webp?w=480&auto=format%2Ccompress&fit=max"
                             className="w-full h-[300px] object-cover group-hover:scale-105 transition"
                         />
                         <div className="absolute inset-0 bg-black/30" />

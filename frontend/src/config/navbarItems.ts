@@ -20,7 +20,7 @@ export const navbarItemsByRole = {
 
   vendor: [
     { label: 'Dashboard', path: '/vendor/dashboard' },
-    { label: 'Property/Package', path: '/vendor/listings' },
+    { label: 'Property', path: '/vendor/listings' },
     { label: 'Bookings', path: '/vendor/bookings' },
     { label: 'Offers', path: '/vendor/offers' },
     { label: 'Reviews', path: '/vendor/reviews' },

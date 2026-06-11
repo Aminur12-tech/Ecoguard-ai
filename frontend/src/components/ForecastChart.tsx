@@ -1,65 +1,106 @@
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+    CartesianGrid,
 } from "recharts";
 
 interface ForecastItem {
-  day: string;
-  visitors: number;
+    day: string;
+    visitors: number;
 }
 
 interface Props {
-  data: ForecastItem[];
+    data: ForecastItem[];
 }
 
 const ForecastChart = ({
-  data,
+    data,
 }: Props) => {
 
-  return (
+    return (
 
-    <div
-      style={{
-        background:"#fff",
-        padding:"20px",
-        borderRadius:"12px",
-        marginTop:"20px"
-      }}
-    >
+        <div
+            className="
+            bg-white
+            rounded-2xl
+            shadow-lg
+            p-6
+            mt-6
+            "
+        >
 
-      <h3>
-        Visitor Forecast Trend
-      </h3>
+            <div
+                className="
+                flex
+                justify-between
+                items-center
+                mb-6
+                "
+            >
 
-      <ResponsiveContainer
-        width="100%"
-        height={300}
-      >
+                <h3
+                    className="
+                    text-xl
+                    font-bold
+                    "
+                >
+                    Visitor Forecast Trend
+                </h3>
 
-        <LineChart data={data}>
+                <span
+                    className="
+                    text-3xl
+                    "
+                >
+                    📈
+                </span>
 
-          <XAxis dataKey="day" />
+            </div>
 
-          <YAxis />
+            <ResponsiveContainer
+                width="100%"
+                height={350}
+            >
 
-          <Tooltip />
+                <LineChart
+                    data={data}
+                >
 
-          <Line
-            type="monotone"
-            dataKey="visitors"
-          />
+                    <CartesianGrid
+                        strokeDasharray="3 3"
+                    />
 
-        </LineChart>
+                    <XAxis
+                        dataKey="day"
+                    />
 
-      </ResponsiveContainer>
+                    <YAxis />
 
-    </div>
+                    <Tooltip />
 
-  );
+                    <Line
+                        type="monotone"
+                        dataKey="visitors"
+                        stroke="#10b981"
+                        strokeWidth={3}
+                        dot={{
+                            r: 5,
+                        }}
+                        activeDot={{
+                            r: 8,
+                        }}
+                    />
+
+                </LineChart>
+
+            </ResponsiveContainer>
+
+        </div>
+    );
 };
 
 export default ForecastChart;

@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Navbar from "./Navbar";
 
@@ -60,6 +61,8 @@ type FiltersType = {
 
 
 export default function ExploreAllPlaces() {
+
+  const navigate = useNavigate();
 
   const [homestays, setHomestays] =
     useState<Homestay[]>([]);
@@ -594,7 +597,7 @@ export default function ExploreAllPlaces() {
 
 
 
-                    <button className="bg-green-700 hover:bg-green-800 text-white px-5 py-3 rounded-2xl font-medium shadow-md transition">
+                    <button onClick={() => navigate(`/homestays/${p._id}`)} className="bg-green-700 hover:bg-green-800 text-white px-5 py-3 rounded-2xl font-medium shadow-md transition">
                       Book Now
                     </button>
 

@@ -15,6 +15,10 @@ import ExploreBookings from './components/ExploreBookings';
 import VendorDashboard from './components/VendorDashboard';
 import AdminDashboard from './components/AdminDashboard';
 import CrowdForcasting from './pages/CrowdForecasting';
+import HomestayDetails from "./pages/HomestayDetails";
+import PlaceDetailsPage from "./pages/PlaceDetailsPage";
+import HomestayManagement from "./pages/HomestayManagement";
+import BookingManagement from "./pages/BookingManagement";
 
 function App() {
   return (
@@ -40,9 +44,13 @@ function App() {
           <Route path='/plane-route' element={<ProtectedRoute><PlanRoute /></ProtectedRoute>} />
           <Route path='/explore-places' element={<ProtectedRoute><ExplorePlaces /></ProtectedRoute>} />
           <Route path='/bookings' element={<ProtectedRoute><ExploreBookings /></ProtectedRoute>} />
-          <Route path='/vendordashboard' element={<ProtectedRoute><VendorDashboard /></ProtectedRoute>} />
+          <Route path='/vendor/dashboard' element={<ProtectedRoute><VendorDashboard /></ProtectedRoute>} />
           <Route path='/admindashboard' element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
           <Route path='/crowd-forecasting' element={<ProtectedRoute><CrowdForcasting /></ProtectedRoute>} />
+          <Route path="/homestays/:id" element={<ProtectedRoute><HomestayDetails /></ProtectedRoute>} />
+          <Route path="/places/kaziranga" element={<ProtectedRoute><PlaceDetailsPage /></ProtectedRoute>} />
+          <Route path="/vendor/listings" element={<ProtectedRoute><HomestayManagement /></ProtectedRoute>} />
+          <Route path ="/vendor/bookings" element={<ProtectedRoute><BookingManagement /></ProtectedRoute>} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -5,6 +5,9 @@ export interface IHomestay extends Document {
   homestay_name: string;
   host_name: string;
 
+  // ✅ ADDED (IMPORTANT FOR BOOKINGS + DASHBOARD)
+  vendor_id: string;
+
   district: string;
   village_town: string;
 
@@ -46,7 +49,7 @@ export interface IHomestay extends Document {
 
   images: string[];
 
-  min_price_override?: number;  
+  min_price_override?: number;
   max_price_override?: number;
 }
 
@@ -63,10 +66,18 @@ const HomestaySchema = new Schema<IHomestay>(
       required: true,
     },
 
-    host_name: String,
+    host_name: {
+      type: String,
+    },
+
+    // ✅ ADDED FIELD (IMPORTANT FIX)
+    vendor_id: {
+      type: String,
+      required: true,
+      index: true,
+    },
 
     district: String,
-
     village_town: String,
 
     location: {
@@ -77,17 +88,13 @@ const HomestaySchema = new Schema<IHomestay>(
     property_type: String,
 
     room_count: Number,
-
     max_guests: Number,
 
     price_per_night_inr: Number,
 
     breakfast_included: Boolean,
-
     wifi: Boolean,
-
     parking: Boolean,
-
     pet_friendly: Boolean,
 
     amenities: [String],
@@ -95,32 +102,25 @@ const HomestaySchema = new Schema<IHomestay>(
     local_food_available: Boolean,
 
     eco_certified: Boolean,
-
     solar_power: Boolean,
-
     rainwater_harvesting: Boolean,
 
     eco_features: [String],
 
     waste_management_score: Number,
-
     sustainability_score: Number,
 
     avg_rating: Number,
-
     review_count: Number,
 
     nearest_attraction: String,
-
     attraction_distance_km: Number,
 
     images: [String],
 
-    min_price_override: { type: Number, default: null },  
-    
+    min_price_override: { type: Number, default: null },
     max_price_override: { type: Number, default: null },
   },
-
   {
     timestamps: true,
   }

@@ -1,126 +1,253 @@
-// src/controllers/booking.controller.ts
 import { Request, Response } from "express";
-import Booking from "../models/Booking";
 import Homestay from "../models/Homestay";
-import { pricingEngine } from "../services/dynamicPricing.service";
+import upload from "../config/multer";
 
-// POST /api/bookings
-export const createBooking = async (req: Request, res: Response) => {
+// ======================================
+// SAFE JSON PARSER
+// ======================================
+const parseJSON = (value: any) => {
   try {
-    const { homestay_id, guest_name, guest_email, check_in, check_out, guests } = req.body;
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    return JSON.parse(value);
+  } catch {
+    return [];
+  }
+};
 
-    // --- Validation ---
-    if (!homestay_id || !guest_name || !guest_email || !check_in || !check_out || !guests) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
+// ======================================
+// CREATE HOMESTAY
+// ======================================
+export const createHomestay = async (req: Request, res: Response) => {
+  try {
+    const {
+      homestay_id,
+      homestay_name,
+      host_name,
+      vendor_id,
+      district,
+      village_town,
+      latitude,
+      longitude,
+      property_type,
+      room_count,
+      max_guests,
+      price_per_night_inr,
+      breakfast_included,
+      wifi,
+      parking,
+      pet_friendly,
+      amenities,
+      local_food_available,
+      eco_certified,
+      solar_power,
+      rainwater_harvesting,
+      eco_features,
+      waste_management_score,
+      sustainability_score,
+      avg_rating,
+      review_count,
+      nearest_attraction,
+      attraction_distance_km,
+    } = req.body;
 
-    const checkInDate  = new Date(check_in);
-    const checkOutDate = new Date(check_out);
-
-    if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
-      return res.status(400).json({ error: "Invalid date format" });
-    }
-
-    if (checkInDate >= checkOutDate) {
-      return res.status(400).json({ error: "checkOut must be after checkIn" });
-    }
-
-    if (checkInDate < new Date(new Date().setHours(0, 0, 0, 0))) {
-      return res.status(400).json({ error: "checkIn cannot be in the past" });
-    }
-
-    // --- Fetch homestay ---
-    const homestay = await Homestay.findOne({ homestay_id });
-    if (!homestay) return res.status(404).json({ error: "Homestay not found" });
-
-    // --- Check guest capacity ---
-    if (guests > homestay.max_guests) {
+    // -----------------------------
+    // VALIDATION
+    // -----------------------------
+    if (
+      !homestay_id ||
+      !homestay_name ||
+      !vendor_id ||
+      !room_count ||
+      !max_guests
+    ) {
       return res.status(400).json({
-        error: `Max guests allowed is ${homestay.max_guests}`,
+        error: "Required fields missing",
       });
     }
 
-    // --- Check room availability ---
-    const bookedRooms = await Booking.countDocuments({
+    // -----------------------------
+    // CREATE HOMESTAY
+    // -----------------------------
+    const newHomestay = new Homestay({
       homestay_id,
-      status: "confirmed",
-      check_in:  { $lt: checkOutDate },
-      check_out: { $gt: checkInDate },
+      homestay_name,
+      host_name,
+      vendor_id,
+
+      district,
+      village_town,
+
+      location: {
+        latitude: Number(latitude),
+        longitude: Number(longitude),
+      },
+
+      property_type,
+
+      room_count: Number(room_count),
+      max_guests: Number(max_guests),
+      price_per_night_inr: Number(price_per_night_inr),
+
+      breakfast_included: breakfast_included === "true",
+      wifi: wifi === "true",
+      parking: parking === "true",
+      pet_friendly: pet_friendly === "true",
+
+      amenities: parseJSON(amenities),
+
+      local_food_available: local_food_available === "true",
+
+      eco_certified: eco_certified === "true",
+      solar_power: solar_power === "true",
+      rainwater_harvesting: rainwater_harvesting === "true",
+
+      eco_features: parseJSON(eco_features),
+
+      waste_management_score: Number(waste_management_score),
+      sustainability_score: Number(sustainability_score),
+
+      avg_rating: Number(avg_rating),
+      review_count: Number(review_count),
+
+      nearest_attraction,
+      attraction_distance_km: Number(attraction_distance_km),
+
+      images: req.file ? [req.file.path] : [],
     });
 
-    if (bookedRooms >= homestay.room_count) {
-      return res.status(409).json({ error: "No rooms available for selected dates" });
-    }
-
-    // --- Compute dynamic price ---
-    const occupancyRate = bookedRooms / homestay.room_count;
-    const breakdown = pricingEngine.calculatePrice(
-      homestay,
-      checkInDate,
-      checkOutDate,
-      { occupancyRate }
-    );
-
-    // --- Create booking ---
-    const booking = await Booking.create({
-      homestay_id,
-      guest_name,
-      guest_email,
-      check_in:        checkInDate,
-      check_out:       checkOutDate,
-      guests,
-      price_per_night: breakdown.finalPrice,
-      total_price:     breakdown.totalPrice,
-      status:          "confirmed",
-    });
+    const saved = await newHomestay.save();
 
     return res.status(201).json({
       success: true,
-      booking,
-      pricing: breakdown,
+      homestay: saved,
+    });
+  } catch (err) {
+    console.error("[createHomestay]", err);
+    return res.status(500).json({
+      error: "Failed to create homestay",
+      details: err instanceof Error ? err.message : err,
+    });
+  }
+};
+
+// ======================================
+// GET ALL HOMESTAYS
+// ======================================
+export const getAllHomestays = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const homestays = await Homestay.find().sort({
+      createdAt: -1,
     });
 
+    return res.json(homestays);
   } catch (err) {
-    console.error("[createBooking]", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({
+      error: "Failed to fetch homestays",
+    });
   }
 };
 
-// PATCH /api/bookings/:bookingId/cancel
-export const cancelBooking = async (req: Request, res: Response) => {
+// ======================================
+// GET SINGLE HOMESTAY
+// ======================================
+export const getHomestayById = async (
+  req: Request,
+  res: Response
+) => {
   try {
-    const { bookingId } = req.params;
+    const { id } = req.params;
 
-    const booking = await Booking.findOne({ booking_id: bookingId });
-    if (!booking) return res.status(404).json({ error: "Booking not found" });
+    const homestay = await Homestay.findById(id);
 
-    if (booking.status === "cancelled") {
-      return res.status(400).json({ error: "Booking is already cancelled" });
+    if (!homestay) {
+      return res.status(404).json({
+        error: "Homestay not found",
+      });
     }
 
-    booking.status = "cancelled";
-    await booking.save();
-
-    return res.json({ success: true, booking });
-
+    return res.json(homestay);
   } catch (err) {
-    console.error("[cancelBooking]", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({
+      error: "Failed to fetch homestay",
+    });
   }
 };
 
-// GET /api/bookings/:bookingId
-export const getBooking = async (req: Request, res: Response) => {
+// ======================================
+// UPDATE HOMESTAY
+// ======================================
+export const updateHomestay = async (
+  req: Request,
+  res: Response
+) => {
   try {
-    const { bookingId } = req.params;
+    const { id } = req.params;
 
-    const booking = await Booking.findOne({ booking_id: bookingId });
-    if (!booking) return res.status(404).json({ error: "Booking not found" });
+    const updated = await Homestay.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        location: {
+          latitude: Number(req.body.latitude),
+          longitude: Number(req.body.longitude),
+        },
+        amenities: req.body.amenities
+          ? parseJSON(req.body.amenities)
+          : undefined,
+        eco_features: req.body.eco_features
+          ? parseJSON(req.body.eco_features)
+          : undefined,
+        images: req.file ? [req.file.path] : undefined,
+      },
+      { new: true }
+    );
 
-    return res.json({ success: true, booking });
+    if (!updated) {
+      return res.status(404).json({
+        error: "Homestay not found",
+      });
+    }
 
+    return res.json({
+      success: true,
+      homestay: updated,
+    });
   } catch (err) {
-    console.error("[getBooking]", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({
+      error: "Failed to update homestay",
+    });
+  }
+};
+
+// ======================================
+// DELETE HOMESTAY
+// ======================================
+export const deleteHomestay = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await Homestay.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        error: "Homestay not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Homestay deleted successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: "Failed to delete homestay",
+    });
   }
 };

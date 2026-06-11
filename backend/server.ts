@@ -10,6 +10,8 @@ import ecoRoutes from './routes/ecoRoutes';
 import homestayRoutes from "./routes/homestayRoutes";
 import bookingRoutes from "./routes/booking.routes";
 import pricingRoutes from "./routes/pricingRoutes";
+import weatherRoutes from "./routes/weatherroutes";
+import vendorRoutes from "./routes/vendor.routes";
 
 const app =  express();
 app.use(cors());
@@ -44,6 +46,8 @@ mongoose.connection.on('connected', () => {
     app.use('/api/homestays', homestayRoutes);
     app.use("/api/bookings", bookingRoutes);
     app.use("/api/pricing", pricingRoutes);
+    app.use("/api/weather", weatherRoutes);
+    app.use("/api/vendors", vendorRoutes);
     app.listen(5000, () => {
         console.log("Server is running on port 5000");
     });
